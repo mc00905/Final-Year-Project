@@ -5,6 +5,7 @@ import { createOrUpdateExample, getExample, getExamples, deleteExample } from '.
 
 @Route("1.0/examples")
 export class ExampleController {
+
     @SuccessResponse("201", "Created")
     @Post("")
     public async createExample (@Body() body: Example): Promise<void> {
@@ -25,6 +26,7 @@ export class ExampleController {
     public async getExample (@Path() name: string): Promise<Example> {
         return await getExample(name);    
     }
+
     @SuccessResponse("204", "Deleted")
     @Delete("/{name}")
     public async deleteExample (@Path() name: string): Promise<void> {

@@ -6,5 +6,4 @@ export interface Example {
 }
 
 export interface ExampleDocument extends Document, Example {}
-
 export interface LeanExample extends LeanDocument<ExampleDocument> {}

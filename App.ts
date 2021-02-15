@@ -6,12 +6,12 @@ import mongoose = require("mongoose");
 
 dotenv.config();
 export const app = express();
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
-app.use(bodyParser.json());
 const config = (async () => {
   await mongoose.connect("mongodb://localhost/example-database", {useNewUrlParser: true, useUnifiedTopology: true})
 })();
