@@ -13,7 +13,7 @@ export const createShoppingItem = async (name: string, category: ShoppingItemCat
     }
 }
 
-export const updateShoppingItemCategory = async (name: string, category: ShoppingItemCategories,): Promise<ShoppingItem> => {
+export const updateShoppingItemCategory = async (name: string, category: ShoppingItemCategories): Promise<ShoppingItem> => {
     const update = { name, category };
     const filter = { name };
     try {
@@ -57,8 +57,8 @@ export const decreaseShoppingItemStock = async (name: string, value: number): Pr
     }
 }
 
-export const getShoppingItem = async (): Promise<ShoppingItem> => {
-    const filter = {};
+export const getShoppingItem = async (name: string): Promise<ShoppingItem> => {
+    const filter = { name };
     try {
         return await shoppingItemModel.findOne(filter).select('-_id -v').lean().exec().then(document => {
             if (!document) throw new Error(`No documents found with filter ${JSON.stringify(filter)}`);
@@ -69,16 +69,17 @@ export const getShoppingItem = async (): Promise<ShoppingItem> => {
     }
 }
 
-export const getShoppingItems = async (): Promise<ShoppingItem[]> => {
+export const getShoppingItems = async (query?: Object): Promise<ShoppingItem[]> => {
     try {
-        return await shoppingItemModel.find().select('-_id -v').lean().exec();
+        if (query) return await shoppingItemModel.find(query).select('-_id -v').lean().exec();
+        else return await shoppingItemModel.find().select('-_id -v').lean().exec();
     } catch (e) {
         throw e;
     }
 }
 
-export const deleteShoppingItem = async (): Promise<void> => {
-    const filter = {}
+export const deleteShoppingItem = async (name: string): Promise<void> => {
+    const filter = { name }
     try {
         await shoppingItemModel.findOneAndRemove(filter, { useFindAndModify: false }).exec();
     } catch (e) {

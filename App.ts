@@ -15,6 +15,6 @@ app.use(
   })
 );
 const config = (async () => {
-  await mongoose.connect("mongodb://localhost/shopping-items-database", {useNewUrlParser: true, useUnifiedTopology: true})
+  await mongoose.connect("mongodb://localhost/example-database", {useNewUrlParser: true, useUnifiedTopology: true})
 })();
 RegisterRoutes(app);
