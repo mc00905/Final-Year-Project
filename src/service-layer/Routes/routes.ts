@@ -3,24 +3,36 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { ExampleController } from './../controllers/ExampleController';
+import { ShoppingItemController } from './../controllers/ShoppingItemController';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "Example": {
+    "ShoppingItemCategories": {
+        "dataType": "refEnum",
+        "enums": ["Frozen","Fruit","Vegetable","Dairy","Bakery"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_ShoppingItem.category-or-name-or-numberOfStock_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"category":{"ref":"ShoppingItemCategories","required":true},"name":{"dataType":"string","required":true},"numberOfStock":{"dataType":"double","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ShoppingItem": {
         "dataType": "refObject",
         "properties": {
             "name": {"dataType":"string","required":true},
-            "description": {"dataType":"string","required":true},
+            "category": {"ref":"ShoppingItemCategories","required":true},
+            "numberOfStock": {"dataType":"double","required":true},
+            "inStock": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_Example.description_": {
+    "Pick_ShoppingItem.category_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"description":{"dataType":"string","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"category":{"ref":"ShoppingItemCategories","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -33,10 +45,10 @@ export function RegisterRoutes(app: express.Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.post('/REST/1.0/examples',
+        app.post('/REST/1.0/shoppingItems',
             function (request: any, response: any, next: any) {
             const args = {
-                    body: {"in":"body","name":"body","required":true,"ref":"Example"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Pick_ShoppingItem.category-or-name-or-numberOfStock_"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -48,18 +60,18 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ExampleController();
+            const controller = new ShoppingItemController();
 
 
-            const promise = controller.createExample.apply(controller, validatedArgs as any);
+            const promise = controller.createShoppingItem.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/REST/1.0/examples/:name',
+        app.put('/REST/1.0/shoppingItems/:name/category',
             function (request: any, response: any, next: any) {
             const args = {
                     name: {"in":"path","name":"name","required":true,"dataType":"string"},
-                    body: {"in":"body","name":"body","required":true,"ref":"Pick_Example.description_"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Pick_ShoppingItem.category_"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -71,14 +83,60 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ExampleController();
+            const controller = new ShoppingItemController();
 
 
-            const promise = controller.updateExample.apply(controller, validatedArgs as any);
+            const promise = controller.updateShoppingItem.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/REST/1.0/examples',
+        app.put('/REST/1.0/shoppingItems/:name/increaseStock',
+            function (request: any, response: any, next: any) {
+            const args = {
+                    name: {"in":"path","name":"name","required":true,"dataType":"string"},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"double","required":true}}},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new ShoppingItemController();
+
+
+            const promise = controller.increaseShoppingItemStock.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, undefined, next);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/REST/1.0/shoppingItems/:name/decreaseStock',
+            function (request: any, response: any, next: any) {
+            const args = {
+                    name: {"in":"path","name":"name","required":true,"dataType":"string"},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"double","required":true}}},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new ShoppingItemController();
+
+
+            const promise = controller.decreaseShoppingItemStock.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, undefined, next);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/REST/1.0/shoppingItems',
             function (request: any, response: any, next: any) {
             const args = {
             };
@@ -92,14 +150,14 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ExampleController();
+            const controller = new ShoppingItemController();
 
 
-            const promise = controller.getExamples.apply(controller, validatedArgs as any);
+            const promise = controller.getShoppingItems.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/REST/1.0/examples/:name',
+        app.get('/REST/1.0/shoppingItems/:name',
             function (request: any, response: any, next: any) {
             const args = {
                     name: {"in":"path","name":"name","required":true,"dataType":"string"},
@@ -114,14 +172,14 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ExampleController();
+            const controller = new ShoppingItemController();
 
 
-            const promise = controller.getExample.apply(controller, validatedArgs as any);
+            const promise = controller.getShoppingItem.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/REST/1.0/examples/:name',
+        app.delete('/REST/1.0/shoppingItems/:name',
             function (request: any, response: any, next: any) {
             const args = {
                     name: {"in":"path","name":"name","required":true,"dataType":"string"},
@@ -136,10 +194,10 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new ExampleController();
+            const controller = new ShoppingItemController();
 
 
-            const promise = controller.deleteExample.apply(controller, validatedArgs as any);
+            const promise = controller.deleteShoppingItem.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
