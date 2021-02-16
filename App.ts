@@ -1,8 +1,10 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { RegisterRoutes } from './src/service-layer/Routes/routes';
 import { rateLimiter } from './src/middleware/RateLimiter'
 import  * as dotenv from 'dotenv';
+import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import mongoose = require("mongoose");
 
 dotenv.config();
@@ -14,7 +16,16 @@ app.use(
     extended: true,
   })
 );
+
 const config = (async () => {
   await mongoose.connect("mongodb://localhost/example-database", {useNewUrlParser: true, useUnifiedTopology: true})
 })();
+
+app.use("/REST/1.0/documentation", swaggerUi.serve, 
+  async (req: Request, res: Response) => {
+    return res.send(swaggerUi.generateHTML(await import('./dist/swagger.json')));
+  }
+);
+
 RegisterRoutes(app);
+app.use(cors());

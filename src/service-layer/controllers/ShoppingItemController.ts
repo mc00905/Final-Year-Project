@@ -3,7 +3,7 @@ import { ShoppingItem } from '../../data-layer/types/ShoppingItem'
 import { createShoppingItem, updateShoppingItemCategory, deleteShoppingItem, getShoppingItem, getShoppingItems, increaseShoppingItemStock, decreaseShoppingItemStock } from '../../data-layer/data-agents/ShoppingItemAgent';
 import { ShoppingItemCategories } from '../../data-layer/enums/ShoppingItemCategories';
 
-@Route("1.0/shoppingItems")
+@Route("/REST/1.0/shoppingItems")
 export class ShoppingItemController {
 
     @SuccessResponse("201", "Created")
