@@ -1,7 +1,15 @@
 import { Document, LeanDocument, } from 'mongoose'
 import { ShoppingItemCategories } from '../enums/ShoppingItemCategories';
 
+
+/**
+ * ShoppingItem objects store the information relating to a product within the store.
+ * It stores all of the identifying and meta information about the product.
+ */
 export interface ShoppingItem {
+    /**
+     * The identifying name of the ShoppingItem
+     */
     name: string;
     category: ShoppingItemCategories;
     numberOfStock: number;

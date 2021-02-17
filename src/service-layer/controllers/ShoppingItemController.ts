@@ -1,11 +1,13 @@
-import { Body, Delete, Get, Path, Post, Put, Query, Route, SuccessResponse } from 'tsoa';
+import { Body, Delete, Get, Path, Post, Put, Query, Route, SuccessResponse, Example } from 'tsoa';
 import { ShoppingItem } from '../../data-layer/types/ShoppingItem'
 import { createShoppingItem, updateShoppingItemCategory, deleteShoppingItem, getShoppingItem, getShoppingItems, increaseShoppingItemStock, decreaseShoppingItemStock } from '../../data-layer/data-agents/ShoppingItemAgent';
 import { ShoppingItemCategories } from '../../data-layer/enums/ShoppingItemCategories';
 
 @Route("/REST/1.0/shoppingItems")
 export class ShoppingItemController {
-
+    /**
+     * Create a new ShoppingItem
+     */
     @SuccessResponse("201", "Created")
     @Post("")
     public async createShoppingItem (@Body() body: Pick<ShoppingItem, 'category' | 'name' | 'numberOfStock'>): Promise<void> {
@@ -32,7 +34,18 @@ export class ShoppingItemController {
         if (category) return await getShoppingItems({ category });
         return await getShoppingItems();
     }
-
+    /**
+     * Gets the ShoppingItem with the supplied name
+     * @param name The unique name of the ShoppingItem
+     * 
+     * @example name "baguette"
+     */
+    @Example<ShoppingItem>({
+        name: "Baguette",
+        category: ShoppingItemCategories.BAKERY,
+        inStock: true,
+        numberOfStock: 14,
+    })
     @Get("/{name}")
     public async getShoppingItem (@Path() name: string): Promise<ShoppingItem> {
         return await getShoppingItem(name);    

@@ -1,3 +1,7 @@
+
+/**
+ * Enum storing all potential categories a ShoppingItem falls under
+ */
 export enum ShoppingItemCategories {
     FROZEN="Frozen",
     FRUIT="Fruit",
