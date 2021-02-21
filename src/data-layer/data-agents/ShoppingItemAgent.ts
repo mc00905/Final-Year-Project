@@ -1,6 +1,8 @@
 import { ShoppingItem, LeanShoppingItem, ShoppingItemDocument } from '../types/ShoppingItem';
 import { shoppingItemModel } from '../models/ShoppingItemModel';
 import { ShoppingItemCategories } from '../enums/ShoppingItemCategories';
+import { ErrorWrapper } from '../../middleware/ErrorWrapper';
+import { ShoppingItemNotFoundError } from '../types/ErrorLibrary';
 
 export const createShoppingItem = async (name: string, category: ShoppingItemCategories, numberOfStock: number): Promise<void> => {
     const filter = { name };
@@ -60,8 +62,8 @@ export const decreaseShoppingItemStock = async (name: string, value: number): Pr
 export const getShoppingItem = async (name: string): Promise<ShoppingItem> => {
     const filter = { name };
     try {
-        return await shoppingItemModel.findOne(filter).select('-_id -v').lean().exec().then(document => {
-            if (!document) throw new Error(`No documents found with filter ${JSON.stringify(filter)}`);
+        return await shoppingItemModel.findOne(filter).select('-_id -v -__v').lean().exec().then(document => {
+            if (!document) throw new ShoppingItemNotFoundError(filter);
             return document;
         });
     } catch (e) {
@@ -72,7 +74,7 @@ export const getShoppingItem = async (name: string): Promise<ShoppingItem> => {
 export const getShoppingItems = async (query?: Object): Promise<ShoppingItem[]> => {
     try {
         if (query) return await shoppingItemModel.find(query).select('-_id -v').lean().exec();
-        else return await shoppingItemModel.find().select('-_id -v').lean().exec();
+        else return await shoppingItemModel.find().select('-_id -v -__v').lean().exec();
     } catch (e) {
         throw e;
     }
