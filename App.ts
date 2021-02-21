@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { RegisterRoutes } from './src/service-layer/Routes/routes';
-import { rateLimiter } from './src/middleware/RateLimiter'
+import { rateLimiter } from './src/middleware/RateLimiter';
+import { handleError, handleGenericError } from './src/middleware/ErrorHandler';
 import  * as dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
@@ -28,4 +29,6 @@ app.use("/REST/1.0/documentation", swaggerUi.serve,
 );
 
 RegisterRoutes(app);
+app.use(handleError);
+app.use(handleGenericError);
 app.use(cors());

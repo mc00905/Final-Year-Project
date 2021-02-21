@@ -38,10 +38,10 @@ export class ShoppingItemController {
      * Gets the ShoppingItem with the supplied name
      * @param name The unique name of the ShoppingItem
      * 
-     * @example name "baguette"
+     * @example name "Apple"
      */
     @Example<ShoppingItem>({
-        name: "Baguette",
+        name: "Apple",
         category: ShoppingItemCategories.BAKERY,
         inStock: true,
         numberOfStock: 14,
