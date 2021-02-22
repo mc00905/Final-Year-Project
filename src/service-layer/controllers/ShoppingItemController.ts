@@ -4,31 +4,35 @@ import { createShoppingItem, updateShoppingItemCategory, deleteShoppingItem, get
 import { ShoppingItemCategories } from '../../data-layer/enums/ShoppingItemCategories';
 import { ErrorWrapper, } from '../../middleware/ErrorWrapper';
 import { ShoppingItemNotFoundError, ErrorLibrary } from '../../data-layer/types/ErrorLibrary';
+import { genericErrorResponseBody, tsoaValidationErrorResponseBody } from '../../middleware/ErrorHandler';
 
 @Route("/REST/1.0/shoppingItems")
 export class ShoppingItemController {
     /**
      * Create a new ShoppingItem
      */
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @SuccessResponse("201", "Created")
     @Post("")
     public async createShoppingItem (@Body() body: Pick<ShoppingItem, 'category' | 'name' | 'numberOfStock'>): Promise<void> {
         await createShoppingItem(body.name, body.category, body.numberOfStock);
     }
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @Put("/{name}/category")
     public async updateShoppingItem (@Path() name: string, @Body() body: Pick<ShoppingItem, 'category'>): Promise<ShoppingItem> {
         return await updateShoppingItemCategory(name, body.category);
     }
-
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @Put("/{name}/increaseStock")
     public async increaseShoppingItemStock (@Path() name: string, @Body() body: { value: number }): Promise<ShoppingItem> {
         return await increaseShoppingItemStock(name, body.value);
     }
-
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @Put("/{name}/decreaseStock")
     public async decreaseShoppingItemStock (@Path() name: string, @Body() body: { value: number }): Promise<ShoppingItem> {
         return await decreaseShoppingItemStock(name, body.value);
     }
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @Get("")
     public async getShoppingItems (@Query() inStock?: boolean, @Query() category?: ShoppingItemCategories, ): Promise<ShoppingItem[]> {
         if (inStock !== null && inStock !== undefined) return await getShoppingItems({ inStock });
@@ -41,6 +45,7 @@ export class ShoppingItemController {
      * 
      * @example name "apple"
      */
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @Example<ShoppingItem>({
         name: "apple",
         category: ShoppingItemCategories.BAKERY,
@@ -66,6 +71,7 @@ export class ShoppingItemController {
         }
     }
 
+    @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @SuccessResponse("204", "Deleted")
     @Delete("/{name}")
     public async deleteShoppingItem (@Path() name: string): Promise<void> {

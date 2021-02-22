@@ -9,6 +9,16 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "tsoaValidationErrorResponseBody": {
+        "dataType": "refObject",
+        "properties": {
+            "details": {"dataType":"any"},
+            "errorIdentifier": {"dataType":"enum","enums":["Validation Error"],"required":true},
+            "message": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ShoppingItemCategories": {
         "dataType": "refEnum",
         "enums": ["Frozen","Fruit","Vegetable","Dairy","Bakery"],

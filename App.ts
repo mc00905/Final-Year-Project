@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { RegisterRoutes } from './src/service-layer/Routes/routes';
 import { rateLimiter } from './src/middleware/RateLimiter';
 import { handleError, handleGenericError } from './src/middleware/ErrorHandler';
-import  * as dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import mongoose = require("mongoose");
@@ -19,16 +19,24 @@ app.use(
 );
 
 const config = (async () => {
-  await mongoose.connect("mongodb://localhost/example-database", {useNewUrlParser: true, useUnifiedTopology: true})
+  await mongoose.connect("mongodb://localhost/example-database", { useNewUrlParser: true, useUnifiedTopology: true })
 })();
 
-app.use("/REST/1.0/documentation", swaggerUi.serve, 
+app.use("/REST/1.0/documentation", swaggerUi.serve,
   async (req: Request, res: Response) => {
     return res.send(swaggerUi.generateHTML(await import('./dist/swagger.json')));
   }
 );
 
 RegisterRoutes(app);
+
+const urlNotFoundErrorHandler = (req: Request, res: Response) => {
+  res.status(404).send({
+    message: `Oops, looks like the route for: ${req.url} wasn't found`
+  });
+}
+
+app.use(urlNotFoundErrorHandler);
 app.use(handleError);
 app.use(handleGenericError);
 app.use(cors());
