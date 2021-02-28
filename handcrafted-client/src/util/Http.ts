@@ -81,19 +81,19 @@ export class Http {
     }
 
     public get = async <T>(url: string): Promise<T> => {
-        return await this.request(httpVerbs.GET, url);
+        return await this.request<T>(httpVerbs.GET, url);
     }
 
     public post = async <T>(url:string, data: Object): Promise<T> => {
-        return await this.request(httpVerbs.POST, url, data);
+        return await this.request<T>(httpVerbs.POST, url, data);
     }
 
     public put = async <T>(url:string, data: Object): Promise<T> => {
-        return await this.request(httpVerbs.PUT, url, data);
+        return await this.request<T>(httpVerbs.PUT, url, data);
     }
 
     public del = async <T>(url:string, data: Object): Promise<T> => {
-        return await this.request(httpVerbs.DELETE, url, data);
+        return await this.request<T>(httpVerbs.DELETE, url, data);
     }
 
 
