@@ -30,7 +30,7 @@ export const updateShoppingItemCategory = async (name: string, category: Shoppin
 export const increaseShoppingItemStock = async (name: string, value: number): Promise<ShoppingItem> => {
     const filter = { name };
     try {
-        return await shoppingItemModel.findOneAndUpdate(filter, { $inc: { numberOfStock: value }, inStock: true }, { useFindAndModify: false, new: true }).lean().exec().then(document => {
+        return await shoppingItemModel.findOneAndUpdate(filter, { $inc: { numberOfStock: value }, inStock: true }, { useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
             if (!document) throw new GenericInternalServerError('Failed to increase stock', `Failed to increase stock for item: ${filter}`);
             return document;
         });
@@ -49,7 +49,7 @@ export const decreaseShoppingItemStock = async (name: string, value: number): Pr
         const numberOfStock = newStockValue > 0 ? newStockValue : 0;
         const inStock = numberOfStock > 0;
         const update = { numberOfStock, inStock };
-        return await shoppingItemModel.findOneAndUpdate(filter, update, { useFindAndModify: false, new: true }).lean().exec().then(document => {
+        return await shoppingItemModel.findOneAndUpdate(filter, update, { useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
             if (!document) throw new GenericInternalServerError('Failed to decrease stock', `Failed to descrease stock for item: ${filter}`);
             return document;
         });

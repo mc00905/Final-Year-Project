@@ -8,6 +8,33 @@ export class MicroserviceClient {
     }
 
     public getShoppingItems = async () => {
-        return await this.http.get('/shoppingItemsssd')
+        return await this.http.get('/shoppingItems')
+    }
+
+
+    public getShoppingItem = async (itemQuery: string) => {
+        return await this.http.get(`/shoppingItems/${itemQuery}`)
+    }
+
+    public increaseShoppingItemStock = async (itemQuery: string, value: number) => {
+        const body = {
+            value,
+        }
+        return await this.http.put(`/shoppingItems/${itemQuery}/increaseStock`, body);
+    }
+
+    public decreaseShoppingItemStock = async (itemQuery: string, value: number) => {
+        const body = {
+            value,
+        }
+        return await this.http.put(`/shoppingItems/${itemQuery}/decreaseStock`, body);
+    }
+
+    
+    public createShoppingItem = async (name: string, category: string, numberOfStock: number) => {
+        const body = {
+            name, category, numberOfStock
+        }
+        return await this.http.post(`/shoppingItems`, body);
     }
 }
