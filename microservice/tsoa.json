@@ -1,0 +1,14 @@
+{
+    "entryFile": "./App.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["src/**/*Controller.ts"],
+    "spec": {
+      "outputDirectory": "./dist",
+      "specVersion": 3,
+      "yaml": false
+    },
+    "routes": {
+      "routesDir": "./src/service-layer/routes",
+      "middleware": "express"
+    }
+  }
