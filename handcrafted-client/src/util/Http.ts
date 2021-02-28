@@ -15,7 +15,7 @@ export class Http {
         })
     }
 
-    private request = async (verb: httpVerbs, url: string, data?: Object): Promise<AxiosResponse> => {
+    private request = async <T>(verb: httpVerbs, url: string, data?: Object): Promise<T> => {
         const axiosErrorHandler = (err: AxiosError) => {
             let errMsg = err.message;
             if (err.response) {
@@ -46,14 +46,14 @@ export class Http {
 
         switch (verb) {
             case httpVerbs.GET:
-                return await this.axInstance.request({
+                return await this.axInstance.request<T>({
                     method: 'get',
                     url,
                 }).then(res => res.data).catch(err => {
                     return axiosErrorHandler(err)
                 })
             case httpVerbs.POST:
-                return await this.axInstance.request({
+                return await this.axInstance.request<T>({
                     method: 'post',
                     url,
                     data
@@ -61,7 +61,7 @@ export class Http {
                     return axiosErrorHandler(err)
                 })
             case httpVerbs.PUT:
-                return await this.axInstance.request({
+                return await this.axInstance.request<T>({
                     method: 'put',
                     url,
                     data
@@ -69,7 +69,7 @@ export class Http {
                     return axiosErrorHandler(err)
                 })
             case httpVerbs.DELETE:
-                return await this.axInstance.request({
+                return await this.axInstance.request<T>({
                     method: 'delete',
                     url,
                     data
@@ -80,19 +80,19 @@ export class Http {
         }
     }
 
-    public get = async (url: string): Promise<AxiosResponse> => {
+    public get = async <T>(url: string): Promise<T> => {
         return await this.request(httpVerbs.GET, url);
     }
 
-    public post = async (url:string, data: Object): Promise<AxiosResponse> => {
+    public post = async <T>(url:string, data: Object): Promise<T> => {
         return await this.request(httpVerbs.POST, url, data);
     }
 
-    public put = async (url:string, data: Object): Promise<AxiosResponse> => {
+    public put = async <T>(url:string, data: Object): Promise<T> => {
         return await this.request(httpVerbs.PUT, url, data);
     }
 
-    public del = async (url:string, data: Object): Promise<AxiosResponse> => {
+    public del = async <T>(url:string, data: Object): Promise<T> => {
         return await this.request(httpVerbs.DELETE, url, data);
     }
 

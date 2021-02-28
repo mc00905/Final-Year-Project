@@ -1,5 +1,12 @@
 import { Http } from '../util/Http'
 
+interface ShoppingItem {
+    name: string;
+    category: string;
+    inStock: boolean;
+    numberOfStock: number;
+}
+
 export class MicroserviceClient {
     private http: Http;
 
@@ -8,26 +15,26 @@ export class MicroserviceClient {
     }
 
     public getShoppingItems = async () => {
-        return await this.http.get('/shoppingItems')
+        return await this.http.get<ShoppingItem[]>('/shoppingItems')
     }
 
 
     public getShoppingItem = async (itemQuery: string) => {
-        return await this.http.get(`/shoppingItems/${itemQuery}`)
+        return await this.http.get<ShoppingItem>(`/shoppingItems/${itemQuery}`)
     }
 
     public increaseShoppingItemStock = async (itemQuery: string, value: number) => {
         const body = {
             value,
         }
-        return await this.http.put(`/shoppingItems/${itemQuery}/increaseStock`, body);
+        return await this.http.put<ShoppingItem>(`/shoppingItems/${itemQuery}/increaseStock`, body);
     }
 
     public decreaseShoppingItemStock = async (itemQuery: string, value: number) => {
         const body = {
             value,
         }
-        return await this.http.put(`/shoppingItems/${itemQuery}/decreaseStock`, body);
+        return await this.http.put<ShoppingItem>(`/shoppingItems/${itemQuery}/decreaseStock`, body);
     }
 
     
@@ -35,6 +42,6 @@ export class MicroserviceClient {
         const body = {
             name, category, numberOfStock
         }
-        return await this.http.post(`/shoppingItems`, body);
+        return await this.http.post<void>(`/shoppingItems`, body);
     }
 }
