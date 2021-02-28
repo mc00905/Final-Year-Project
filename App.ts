@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { RegisterRoutes } from './src/service-layer/Routes/routes';
 import { rateLimiter } from './src/middleware/RateLimiter';
 import { handleError, handleGenericError } from './src/middleware/ErrorHandler';
+import { RouteNotFoundError } from './src/data-layer/types/ErrorLibrary';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
@@ -30,13 +31,12 @@ app.use("/REST/1.0/documentation", swaggerUi.serve,
 
 RegisterRoutes(app);
 
-const urlNotFoundErrorHandler = (req: Request, res: Response) => {
-  res.status(404).send({
-    message: `Oops, looks like the route for: ${req.url} wasn't found`
-  });
-}
+const urlNotFoundErrorHandler = (req: Request, res: Response, next: Function) => {
+  next(new RouteNotFoundError(`Oops, looks like the route for: ${req.url} wasn't found`));
+};
 
 app.use(urlNotFoundErrorHandler);
 app.use(handleError);
 app.use(handleGenericError);
+
 app.use(cors());

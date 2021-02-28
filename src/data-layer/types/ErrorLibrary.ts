@@ -3,6 +3,7 @@ import { ErrorWrapper400, ErrorWrapper404, ErrorWrapper412, ErrorWrapper500 } fr
 export enum ErrorLibrary {
     ShoppingItemNotFound = 'ShoppingItemNotFound',
     GenericInternalServerError = 'Internal Server Error',
+    RouteNotFoundError = 'Route not found'
 }
 
 export class ShoppingItemNotFoundError extends ErrorWrapper404 {
@@ -19,5 +20,14 @@ export class GenericInternalServerError extends ErrorWrapper500 {
         details: string,
     ) {
         super(ErrorLibrary.GenericInternalServerError, message, details);
+    }
+}
+
+export class RouteNotFoundError extends ErrorWrapper404 {
+    constructor(
+        message: string,
+        details?: string,
+    ) {
+        super(ErrorLibrary.RouteNotFoundError, message, details);
     }
 }

@@ -16,5 +16,5 @@ export interface ShoppingItem {
     inStock: boolean;
 }
 
-export interface ShoppingItemDocument extends Document, ShoppingItem {}
-export interface LeanShoppingItem extends LeanDocument<ShoppingItemDocument> {}
+export interface ShoppingItemDocument extends Document, ShoppingItem { }
+export interface LeanShoppingItem extends LeanDocument<ShoppingItemDocument> { }

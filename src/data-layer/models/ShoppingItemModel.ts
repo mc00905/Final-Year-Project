@@ -1,6 +1,6 @@
 import { ShoppingItemCategories } from '../enums/ShoppingItemCategories';
 import * as mongoose from 'mongoose';
-import { ShoppingItemDocument }  from '../types/ShoppingItem'
+import { ShoppingItemDocument } from '../types/ShoppingItem'
 
 const shoppingItemSchema = new mongoose.Schema({
     numberOfStock: {

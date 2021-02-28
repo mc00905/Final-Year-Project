@@ -19,7 +19,7 @@ export const updateShoppingItemCategory = async (name: string, category: Shoppin
     const filter = { name };
     try {
         return await shoppingItemModel.findOneAndUpdate(filter, update, { upsert: true, useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
-            if (!document) throw new GenericInternalServerError('Failed to update ShoppingItem category',`Failed to update ShoppingItem category for item: ${JSON.stringify(filter)} with value: ${JSON.stringify(update)}`);
+            if (!document) throw new GenericInternalServerError('Failed to update ShoppingItem category', `Failed to update ShoppingItem category for item: ${JSON.stringify(filter)} with value: ${JSON.stringify(update)}`);
             return document;
         });
     } catch (e) {

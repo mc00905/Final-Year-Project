@@ -3,13 +3,13 @@ import { ValidateError } from 'tsoa';
 import { ErrorWrapper } from './ErrorWrapper';
 
 
-export interface genericErrorResponseBody  {
+export interface genericErrorResponseBody {
   details?: any;
   errorIdentifier?: string;
   message: string;
 }
 
-export interface tsoaValidationErrorResponseBody  {
+export interface tsoaValidationErrorResponseBody {
   details?: any;
   errorIdentifier: 'Validation Error';
   message: string;
