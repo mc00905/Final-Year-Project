@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 import { ErrorWrapper } from './ErrorWrapper';
 import { httpVerbs } from './HttpVerbs';
 export class Http {
@@ -13,6 +14,12 @@ export class Http {
         this.axInstance = axios.create({
             baseURL: this.baseUrl, headers: this.customHeaders,
         })
+        axiosRetry(this.axInstance, {
+            retries: 3, retryDelay: axiosRetry.exponentialDelay,
+            retryCondition: (error) => {
+                return error?.response?.status === 429 || error?.response?.status === 501;
+            },
+        });
     }
 
     private request = async <T>(verb: httpVerbs, url: string, data?: Object): Promise<T> => {
