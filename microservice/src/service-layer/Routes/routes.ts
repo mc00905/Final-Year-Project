@@ -9,10 +9,17 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "FieldErrors": {
+        "dataType": "refObject",
+        "properties": {
+        },
+        "additionalProperties": {"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"any"},"message":{"dataType":"string","required":true}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "tsoaValidationErrorResponseBody": {
         "dataType": "refObject",
         "properties": {
-            "details": {"dataType":"any"},
+            "details": {"ref":"FieldErrors"},
             "errorIdentifier": {"dataType":"enum","enums":["Validation Error"],"required":true},
             "message": {"dataType":"string","required":true},
         },

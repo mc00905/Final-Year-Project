@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { ValidateError } from 'tsoa';
+import { ValidateError, FieldErrors } from 'tsoa';
 import { ErrorWrapper } from './ErrorWrapper';
 
 
@@ -10,7 +10,7 @@ export interface genericErrorResponseBody {
 }
 
 export interface tsoaValidationErrorResponseBody {
-  details?: any;
+  details?: FieldErrors;
   errorIdentifier: 'Validation Error';
   message: string;
 }

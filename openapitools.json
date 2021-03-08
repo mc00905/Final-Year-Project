@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "4.3.1",
+    "storageDir": "~/my/custom/storage/dir",
+    "generators": {
+      "v2.0": { 
+        "generatorName": "typescript-axios",
+        "output": "#{cwd}/output/v2.0/#{ext}/#{name}",
+        "glob": "examples/v2.0/{json,yaml}/*.{json,yaml}",
+        "additionalProperties": {
+          "ngVersion": "6.1.7",
+          "npmName": "restClient",
+          "supportsES6": "true",
+          "npmVersion": "6.9.0",
+          "withInterfaces": true
+        }
+      },
+      "v3.0": { 
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/output/v3.0/#{ext}/#{name}",
+        "glob": "examples/v3.0/petstore.{json,yaml}"
+      }
+    }
+  }
+}
