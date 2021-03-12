@@ -45,3 +45,5 @@ export class MicroserviceClient {
         return await this.http.post<void>(`/shoppingItems`, body);
     }
 }
+
+export default MicroserviceClient;
