@@ -1,9 +1,9 @@
 import { Body, Delete, Get, Path, Post, Put, Query, Route, SuccessResponse, Example, TsoaResponse, Res, Response } from 'tsoa';
-import { ShoppingItem } from '../../data-layer/types/ShoppingItem'
+import { ShoppingItem } from '../../middleware/types/ShoppingItem'
 import { createShoppingItem, updateShoppingItemCategory, deleteShoppingItem, getShoppingItem, getShoppingItems, increaseShoppingItemStock, decreaseShoppingItemStock } from '../../data-layer/data-agents/ShoppingItemAgent';
-import { ShoppingItemCategories } from '../../data-layer/enums/ShoppingItemCategories';
+import { ShoppingItemCategories } from '../../middleware/enums/ShoppingItemCategories';
 import { ErrorWrapper, } from '../../middleware/ErrorWrapper';
-import { ShoppingItemNotFoundError, ErrorLibrary } from '../../data-layer/types/ErrorLibrary';
+import { ShoppingItemNotFoundError, ErrorLibrary } from '../../middleware/types/ErrorLibrary';
 import { genericErrorResponseBody, tsoaValidationErrorResponseBody } from '../../middleware/ErrorHandler';
 
 @Route("/REST/1.0/shoppingItems")

@@ -1,4 +1,4 @@
-import { ErrorWrapper400, ErrorWrapper404, ErrorWrapper412, ErrorWrapper500 } from '../../middleware/ErrorWrapper';
+import { ErrorWrapper400, ErrorWrapper404, ErrorWrapper412, ErrorWrapper500 } from '../ErrorWrapper';
 
 export enum ErrorLibrary {
     ShoppingItemNotFound = 'ShoppingItemNotFound',

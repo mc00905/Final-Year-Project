@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { RegisterRoutes } from './src/service-layer/Routes/routes';
 import { rateLimiter } from './src/middleware/RateLimiter';
 import { handleError, handleGenericError } from './src/middleware/ErrorHandler';
-import { RouteNotFoundError } from './src/data-layer/types/ErrorLibrary';
+import { RouteNotFoundError } from './src/middleware/types/ErrorLibrary';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';

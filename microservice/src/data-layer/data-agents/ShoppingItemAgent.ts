@@ -1,7 +1,7 @@
-import { ShoppingItem, LeanShoppingItem, ShoppingItemDocument } from '../types/ShoppingItem';
+import { ShoppingItem, LeanShoppingItem, ShoppingItemDocument } from '../../middleware/types/ShoppingItem';
 import { shoppingItemModel } from '../models/ShoppingItemModel';
-import { ShoppingItemCategories } from '../enums/ShoppingItemCategories';
-import { ShoppingItemNotFoundError, GenericInternalServerError } from '../types/ErrorLibrary';
+import { ShoppingItemCategories } from '../../middleware/enums/ShoppingItemCategories';
+import { ShoppingItemNotFoundError, GenericInternalServerError } from '../../middleware/types/ErrorLibrary';
 
 export const createShoppingItem = async (name: string, category: ShoppingItemCategories, numberOfStock: number): Promise<void> => {
     const filter = { name };
