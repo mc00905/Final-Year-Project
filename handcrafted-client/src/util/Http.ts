@@ -16,7 +16,7 @@ export class Http {
         })
         axiosRetry(this.axInstance, {
             retries: 3, retryDelay: axiosRetry.exponentialDelay,
-            retryCondition: (error) => {
+            retryCondition: (error: AxiosError) => {
                 return error?.response?.status === 429 || error?.response?.status === 501;
             },
         });
