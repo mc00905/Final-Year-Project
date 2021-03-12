@@ -45,7 +45,7 @@ export class Http {
                 throw new ErrorWrapper(errStatus, errorIdentifier, errMsg, errorDetails);
             } else if (err.request) {
                 const requestInfo = err.request;
-                throw new ErrorWrapper(500, 'UnknownError', `Something went wrong with the request: ${errMsg}`, `Request Information: ${JSON.stringify(requestInfo)}`);
+                throw new ErrorWrapper(500, 'UnknownError', `Something went wrong with the request: ${errMsg}`, `Request Information: ${requestInfo}`);
             } else {
                 throw new ErrorWrapper(500, 'UnknownError', `Something went wrong: ${errMsg}`);
             }
