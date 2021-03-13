@@ -1,5 +1,5 @@
 import { Body, Delete, Get, Path, Post, Put, Query, Route, SuccessResponse, Example, TsoaResponse, Res, Response } from 'tsoa';
-import { ShoppingItem } from '../../middleware/types/ShoppingItem'
+import { PaginatedShoppingItemArr, ShoppingItem } from '../../middleware/types/ShoppingItem'
 import { createShoppingItem, updateShoppingItemCategory, deleteShoppingItem, getShoppingItem, getShoppingItems, increaseShoppingItemStock, decreaseShoppingItemStock } from '../../data-layer/data-agents/ShoppingItemAgent';
 import { ShoppingItemCategories } from '../../middleware/enums/ShoppingItemCategories';
 import { ErrorWrapper, } from '../../middleware/ErrorWrapper';
@@ -47,10 +47,11 @@ export class ShoppingItemController {
         inStock: false,
         numberOfStock: 0,
     }])
-    public async getShoppingItems(@Query() inStock?: boolean, @Query() category?: ShoppingItemCategories,): Promise<ShoppingItem[]> {
-        if (inStock !== null && inStock !== undefined) return await getShoppingItems({ inStock });
-        if (category) return await getShoppingItems({ category });
-        return await getShoppingItems();
+    public async getShoppingItems(@Query() inStock?: boolean, @Query() category?: ShoppingItemCategories, @Query() page?: number, @Query() pageSize?: number): Promise<PaginatedShoppingItemArr> {
+        if (inStock !== null && inStock !== undefined && category) return await getShoppingItems({ inStock, category }, page, pageSize);
+        if (inStock !== null && inStock !== undefined) return await getShoppingItems({ inStock }, page, pageSize);
+        if (category) return await getShoppingItems({ category }, page, pageSize);
+        return await getShoppingItems(undefined, page, pageSize);
     }
 
 

@@ -1,4 +1,4 @@
-import { ShoppingItem, LeanShoppingItem, ShoppingItemDocument } from '../../middleware/types/ShoppingItem';
+import { ShoppingItem, LeanShoppingItem, ShoppingItemDocument, PaginatedShoppingItemArr } from '../../middleware/types/ShoppingItem';
 import { shoppingItemModel } from '../models/ShoppingItemModel';
 import { ShoppingItemCategories } from '../../middleware/enums/ShoppingItemCategories';
 import { ShoppingItemNotFoundError, GenericInternalServerError } from '../../middleware/types/ErrorLibrary';
@@ -70,10 +70,18 @@ export const getShoppingItem = async (name: string): Promise<ShoppingItem> => {
     }
 }
 
-export const getShoppingItems = async (query?: Object): Promise<ShoppingItem[]> => {
+export const getShoppingItems = async (query?: Object, page:number = 1, pageSize:number =10): Promise<PaginatedShoppingItemArr> => {
     try {
-        if (query) return await shoppingItemModel.find(query).select('-_id -v').lean().exec();
-        else return await shoppingItemModel.find().select('-_id -v -__v').lean().exec();
+
+        const results = await shoppingItemModel.paginate(query, {
+            select: '-_id -v',
+            lean: true,
+        });
+        return {
+            page,
+            shoppingItems: results.docs,
+            totalPages: results.totalPages,
+        }
     } catch (e) {
         throw e;
     }
@@ -82,7 +90,7 @@ export const getShoppingItems = async (query?: Object): Promise<ShoppingItem[]> 
 export const deleteShoppingItem = async (name: string): Promise<void> => {
     const filter = { name }
     try {
-        await shoppingItemModel.findOneAndRemove(filter, { useFindAndModify: false }).exec();
+        await shoppingItemModel.findOneAndRemove(filter).exec();
     } catch (e) {
         throw e;
     }

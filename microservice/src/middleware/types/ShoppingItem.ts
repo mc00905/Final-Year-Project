@@ -1,4 +1,4 @@
-import { Document, LeanDocument, } from 'mongoose'
+import { Document, LeanDocument } from 'mongoose'
 import { ShoppingItemCategories } from '../enums/ShoppingItemCategories';
 
 
@@ -14,6 +14,12 @@ export interface ShoppingItem {
     category: ShoppingItemCategories;
     numberOfStock: number;
     inStock: boolean;
+}
+
+export interface PaginatedShoppingItemArr {
+    shoppingItems: ShoppingItem[],
+    page: number,
+    totalPages: number,
 }
 
 export interface ShoppingItemDocument extends Document, ShoppingItem { }

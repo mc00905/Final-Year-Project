@@ -1,8 +1,8 @@
 import { ShoppingItemCategories } from '../../middleware/enums/ShoppingItemCategories';
-import * as mongoose from 'mongoose';
-import { ShoppingItemDocument } from '../../middleware/types/ShoppingItem'
-
-const shoppingItemSchema = new mongoose.Schema({
+import { PaginateModel, Document, Schema, model } from 'mongoose';
+import { ShoppingItem, ShoppingItemDocument } from '../../middleware/types/ShoppingItem'
+import MongoosePaginate from 'mongoose-paginate-v2'
+const shoppingItemSchema = new Schema({
     numberOfStock: {
         required: true,
         type: Number,
@@ -20,5 +20,7 @@ const shoppingItemSchema = new mongoose.Schema({
         enum: Object.values(ShoppingItemCategories)
     }
 })
+shoppingItemSchema.plugin(MongoosePaginate);
 
-export const shoppingItemModel = mongoose.model<ShoppingItemDocument>("shoppingItem", shoppingItemSchema);
+interface ShoppingItemModel<T extends Document> extends PaginateModel<T> {}
+export const shoppingItemModel: ShoppingItemModel<ShoppingItemDocument> = model<ShoppingItemDocument>('shoppingItem', shoppingItemSchema) as ShoppingItemModel<ShoppingItemDocument>;

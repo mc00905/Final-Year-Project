@@ -52,6 +52,16 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"category":{"ref":"ShoppingItemCategories","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PaginatedShoppingItemArr": {
+        "dataType": "refObject",
+        "properties": {
+            "shoppingItems": {"dataType":"array","array":{"ref":"ShoppingItem"},"required":true},
+            "page": {"dataType":"double","required":true},
+            "totalPages": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ErrorLibrary.ShoppingItemNotFound": {
         "dataType": "refEnum",
         "enums": ["ShoppingItemNotFound"],
@@ -163,6 +173,8 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     inStock: {"in":"query","name":"inStock","dataType":"boolean"},
                     category: {"in":"query","name":"category","ref":"ShoppingItemCategories"},
+                    page: {"in":"query","name":"page","dataType":"double"},
+                    pageSize: {"in":"query","name":"pageSize","dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
