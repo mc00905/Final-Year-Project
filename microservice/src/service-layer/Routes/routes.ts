@@ -118,7 +118,7 @@ export function RegisterRoutes(app: express.Router) {
             const controller = new ShoppingItemController();
 
 
-            const promise = controller.updateShoppingItem.apply(controller, validatedArgs as any);
+            const promise = controller.updateShoppingItemCategory.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

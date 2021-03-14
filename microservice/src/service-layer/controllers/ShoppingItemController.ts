@@ -21,7 +21,7 @@ export class ShoppingItemController {
     }
     @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')
     @Put("/{name}/category")
-    public async updateShoppingItem(@Path() name: string, @Body() body: Pick<ShoppingItem, 'category'>): Promise<ShoppingItem> {
+    public async updateShoppingItemCategory(@Path() name: string, @Body() body: Pick<ShoppingItem, 'category'>): Promise<ShoppingItem> {
         return await updateShoppingItemCategory(name, body.category);
     }
     @Response<tsoaValidationErrorResponseBody>(400, 'Validation Error')

@@ -18,8 +18,8 @@ export const updateShoppingItemCategory = async (name: string, category: Shoppin
     const update = { name, category };
     const filter = { name };
     try {
-        return await shoppingItemModel.findOneAndUpdate(filter, update, { upsert: true, useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
-            if (!document) throw new GenericInternalServerError('Failed to update ShoppingItem category', `Failed to update ShoppingItem category for item: ${JSON.stringify(filter)} with value: ${JSON.stringify(update)}`);
+        return await shoppingItemModel.findOneAndUpdate(filter, update, { useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
+            if (!document) throw new ShoppingItemNotFoundError(filter);
             return document;
         });
     } catch (e) {
@@ -31,7 +31,7 @@ export const increaseShoppingItemStock = async (name: string, value: number): Pr
     const filter = { name };
     try {
         return await shoppingItemModel.findOneAndUpdate(filter, { $inc: { numberOfStock: value }, inStock: true }, { useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
-            if (!document) throw new GenericInternalServerError('Failed to increase stock', `Failed to increase stock for item: ${filter}`);
+            if (!document) throw new ShoppingItemNotFoundError(filter);
             return document;
         });
     } catch (e) {
@@ -50,7 +50,7 @@ export const decreaseShoppingItemStock = async (name: string, value: number): Pr
         const inStock = numberOfStock > 0;
         const update = { numberOfStock, inStock };
         return await shoppingItemModel.findOneAndUpdate(filter, update, { useFindAndModify: false, new: true }).select('-_id -v').lean().exec().then(document => {
-            if (!document) throw new GenericInternalServerError('Failed to decrease stock', `Failed to descrease stock for item: ${filter}`);
+            if (!document) throw new ShoppingItemNotFoundError(filter);
             return document;
         });
     } catch (e) {
@@ -90,7 +90,9 @@ export const getShoppingItems = async (query?: Object, page:number = 1, pageSize
 export const deleteShoppingItem = async (name: string): Promise<void> => {
     const filter = { name }
     try {
-        await shoppingItemModel.findOneAndRemove(filter).exec();
+        await shoppingItemModel.findOneAndRemove(filter, { useFindAndModify: false }).exec().then(document => {
+            if (!document) throw new ShoppingItemNotFoundError(filter);
+        });
     } catch (e) {
         throw e;
     }
