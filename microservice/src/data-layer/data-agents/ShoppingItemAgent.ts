@@ -70,12 +70,14 @@ export const getShoppingItem = async (name: string): Promise<ShoppingItem> => {
     }
 }
 
-export const getShoppingItems = async (query?: Object, page:number = 1, pageSize:number =10): Promise<PaginatedShoppingItemArr> => {
+export const getShoppingItems = async (query?: any[], page:number=1, pageSize:number=10): Promise<PaginatedShoppingItemArr> => {
     try {
-
-        const results = await shoppingItemModel.paginate(query, {
+        const objectQuery = query? Object.fromEntries(query) : {};
+        const results = await shoppingItemModel.paginate(objectQuery, {
             select: '-_id -v',
             lean: true,
+            limit: pageSize,
+            page,
         });
         return {
             page,

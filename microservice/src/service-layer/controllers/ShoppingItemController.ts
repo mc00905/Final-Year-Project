@@ -48,10 +48,10 @@ export class ShoppingItemController {
         numberOfStock: 0,
     }])
     public async getShoppingItems(@Query() inStock?: boolean, @Query() category?: ShoppingItemCategories, @Query() page?: number, @Query() pageSize?: number): Promise<PaginatedShoppingItemArr> {
-        if (inStock !== null && inStock !== undefined && category) return await getShoppingItems({ inStock, category }, page, pageSize);
-        if (inStock !== null && inStock !== undefined) return await getShoppingItems({ inStock }, page, pageSize);
-        if (category) return await getShoppingItems({ category }, page, pageSize);
-        return await getShoppingItems(undefined, page, pageSize);
+        const query = [];
+        if (category) query.push(['category', category]);
+        if (inStock !== null && inStock !== undefined) query.push(['inStock', inStock]);
+        return await getShoppingItems(query, page, pageSize);
     }
 
 
