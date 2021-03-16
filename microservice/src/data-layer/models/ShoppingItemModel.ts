@@ -23,4 +23,4 @@ const shoppingItemSchema = new Schema({
 shoppingItemSchema.plugin(MongoosePaginate);
 
 interface ShoppingItemModel<T extends Document> extends PaginateModel<T> {}
-export const shoppingItemModel: ShoppingItemModel<ShoppingItemDocument> = model<ShoppingItemDocument>('shoppingItem', shoppingItemSchema) as ShoppingItemModel<ShoppingItemDocument>;
+export const shoppingItemModel = model<ShoppingItemDocument>('shoppingItem', shoppingItemSchema) as ShoppingItemModel<ShoppingItemDocument>;
