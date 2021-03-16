@@ -10,7 +10,7 @@ import swaggerUi from 'swagger-ui-express';
 import mongoose = require("mongoose");
 
 dotenv.config();
-export const app = express();
+const app = express();
 app.use(rateLimiter)
 app.use(bodyParser.json());
 app.use(
@@ -40,3 +40,4 @@ app.use(handleError);
 app.use(handleGenericError);
 
 app.use(cors());
+export default app;

@@ -8,5 +8,6 @@ module.exports = {
     testEnvironment: 'node',
     preset: 'ts-jest',
 	testMatch: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node']
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+    testTimeout: 30000,
 };
