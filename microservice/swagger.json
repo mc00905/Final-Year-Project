@@ -1,0 +1,552 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"FieldErrors": {
+				"properties": {},
+				"type": "object",
+				"additionalProperties": {
+					"properties": {
+						"value": {},
+						"message": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"message"
+					],
+					"type": "object"
+				}
+			},
+			"tsoaValidationErrorResponseBody": {
+				"properties": {
+					"details": {
+						"$ref": "#/components/schemas/FieldErrors"
+					},
+					"errorIdentifier": {
+						"type": "string",
+						"enum": [
+							"Validation Error"
+						],
+						"nullable": false
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"errorIdentifier",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ShoppingItemCategories": {
+				"description": "Enum storing all potential categories a ShoppingItem falls under",
+				"enum": [
+					"Frozen",
+					"Fruit",
+					"Vegetable",
+					"Dairy",
+					"Bakery"
+				],
+				"type": "string"
+			},
+			"Pick_ShoppingItem.category-or-name-or-numberOfStock_": {
+				"properties": {
+					"category": {
+						"$ref": "#/components/schemas/ShoppingItemCategories"
+					},
+					"name": {
+						"type": "string",
+						"description": "The identifying name of the ShoppingItem"
+					},
+					"numberOfStock": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"category",
+					"name",
+					"numberOfStock"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"ShoppingItem": {
+				"description": "ShoppingItem objects store the information relating to a product within the store.\r\nIt stores all of the identifying and meta information about the product.",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "The identifying name of the ShoppingItem"
+					},
+					"category": {
+						"$ref": "#/components/schemas/ShoppingItemCategories"
+					},
+					"numberOfStock": {
+						"type": "number",
+						"format": "double"
+					},
+					"inStock": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"name",
+					"category",
+					"numberOfStock",
+					"inStock"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_ShoppingItem.category_": {
+				"properties": {
+					"category": {
+						"$ref": "#/components/schemas/ShoppingItemCategories"
+					}
+				},
+				"required": [
+					"category"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"PaginatedShoppingItemArr": {
+				"properties": {
+					"shoppingItems": {
+						"items": {
+							"$ref": "#/components/schemas/ShoppingItem"
+						},
+						"type": "array"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"shoppingItems",
+					"page",
+					"totalPages"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ErrorLibrary.ShoppingItemNotFound": {
+				"enum": [
+					"ShoppingItemNotFound"
+				],
+				"type": "string"
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "example-repo",
+		"version": "1.0.0",
+		"license": {
+			"name": "MIT"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/REST/1.0/shoppingItems": {
+			"post": {
+				"operationId": "CreateShoppingItem",
+				"responses": {
+					"201": {
+						"description": "Created"
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new ShoppingItem",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Pick_ShoppingItem.category-or-name-or-numberOfStock_"
+							},
+							"example": {
+								"name": "apple",
+								"category": "Fruit",
+								"numberOfStock": "10"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetShoppingItems",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedShoppingItemArr"
+								},
+								"examples": {
+									"Example 1": {
+										"value": [
+											{
+												"name": "apple",
+												"category": "Fruit",
+												"inStock": true,
+												"numberOfStock": 14
+											},
+											{
+												"name": "cabbage",
+												"category": "Vegetable",
+												"inStock": false,
+												"numberOfStock": 0
+											}
+										]
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "inStock",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "category",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/ShoppingItemCategories"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/REST/1.0/shoppingItems/{name}/category": {
+			"put": {
+				"operationId": "UpdateShoppingItemCategory",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ShoppingItem"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Pick_ShoppingItem.category_"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/REST/1.0/shoppingItems/{name}/increaseStock": {
+			"put": {
+				"operationId": "IncreaseShoppingItemStock",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ShoppingItem"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"value": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"value"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/REST/1.0/shoppingItems/{name}/decreaseStock": {
+			"put": {
+				"operationId": "DecreaseShoppingItemStock",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ShoppingItem"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"value": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"value"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/REST/1.0/shoppingItems/{name}": {
+			"get": {
+				"operationId": "GetShoppingItem",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ShoppingItem"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"name": "apple",
+											"category": "Fruit",
+											"inStock": true,
+											"numberOfStock": 14
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"errorIdentifier": {
+											"$ref": "#/components/schemas/ErrorLibrary.ShoppingItemNotFound"
+										}
+									},
+									"required": [
+										"message",
+										"errorIdentifier"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets the ShoppingItem with the supplied name",
+				"security": [],
+				"parameters": [
+					{
+						"description": "The unique name of the ShoppingItem",
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"example": "apple"
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteShoppingItem",
+				"responses": {
+					"204": {
+						"description": "Deleted"
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/tsoaValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

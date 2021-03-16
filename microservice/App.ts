@@ -25,7 +25,7 @@ const config = (async () => {
 
 app.use("/REST/1.0/documentation", swaggerUi.serve,
   async (req: Request, res: Response) => {
-    return res.send(swaggerUi.generateHTML(await import('./dist/swagger.json')));
+    return res.send(swaggerUi.generateHTML(await import('./swagger.json')));
   }
 );
 
