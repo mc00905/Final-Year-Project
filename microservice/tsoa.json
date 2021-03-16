@@ -1,9 +1,9 @@
 {
-    "entryFile": "./App.ts",
+    "entryFile": "./src/App.ts",
     "noImplicitAdditionalProperties": "throw-on-extras",
     "controllerPathGlobs": ["src/**/*Controller.ts"],
     "spec": {
-      "outputDirectory": "./",
+      "outputDirectory": "./src/spec",
       "specVersion": 3,
       "yaml": false
     },

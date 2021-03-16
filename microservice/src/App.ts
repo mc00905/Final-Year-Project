@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import { RegisterRoutes } from './src/service-layer/Routes/routes';
-import { rateLimiter } from './src/middleware/RateLimiter';
-import { handleError, handleGenericError } from './src/middleware/ErrorHandler';
-import { RouteNotFoundError } from './src/middleware/types/ErrorLibrary';
+import { RegisterRoutes } from './service-layer/Routes/routes';
+import { rateLimiter } from './middleware/RateLimiter';
+import { handleError, handleGenericError } from './middleware/ErrorHandler';
+import { RouteNotFoundError } from './middleware/types/ErrorLibrary';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
@@ -25,7 +25,7 @@ const config = (async () => {
 
 app.use("/REST/1.0/documentation", swaggerUi.serve,
   async (req: Request, res: Response) => {
-    return res.send(swaggerUi.generateHTML(await import('./swagger.json')));
+    return res.send(swaggerUi.generateHTML(await import('./spec/swagger.json')));
   }
 );
 
