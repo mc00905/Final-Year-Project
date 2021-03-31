@@ -22,7 +22,7 @@ export class Http {
         });
     }
 
-    private request = async <T>(verb: httpVerbs, url: string, data?: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
+    private request = async <T>(verb: httpVerbs, url: string, queryParams?: Object, data?: Object): Promise<AxiosResponse<T>> => {
         const axiosErrorHandler = (err: AxiosError) => {
             let errMsg = err.message;
             if (err.response) {
@@ -91,20 +91,20 @@ export class Http {
         }
     }
 
-    public get = async <T>(url: string): Promise<AxiosResponse<T>> => {
-        return await this.request<T>(httpVerbs.GET, url);
+    public get = async <T>(url: string, queryParams?: Object): Promise<AxiosResponse<T>> => {
+        return await this.request<T>(httpVerbs.GET, url, queryParams);
     }
 
-    public post = async <T>(url:string, data: Object): Promise<AxiosResponse<T>> => {
-        return await this.request<T>(httpVerbs.POST, url, data);
+    public post = async <T>(url:string, data: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
+        return await this.request<T>(httpVerbs.POST, url, queryParams, data);
     }
 
-    public put = async <T>(url:string, data: Object): Promise<AxiosResponse<T>> => {
-        return await this.request<T>(httpVerbs.PUT, url, data);
+    public put = async <T>(url:string, data: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
+        return await this.request<T>(httpVerbs.PUT, url, queryParams, data);
     }
 
-    public del = async <T>(url:string, data: Object): Promise<AxiosResponse<T>> => {
-        return await this.request<T>(httpVerbs.DELETE, url, data);
+    public del = async <T>(url:string, data: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
+        return await this.request<T>(httpVerbs.DELETE, url,queryParams, data);
     }
 
 
