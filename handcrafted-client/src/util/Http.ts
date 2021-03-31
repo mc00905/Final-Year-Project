@@ -22,7 +22,7 @@ export class Http {
         });
     }
 
-    private request = async <T>(verb: httpVerbs, url: string, data?: Object): Promise<AxiosResponse<T>> => {
+    private request = async <T>(verb: httpVerbs, url: string, data?: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
         const axiosErrorHandler = (err: AxiosError) => {
             let errMsg = err.message;
             if (err.response) {
@@ -56,6 +56,7 @@ export class Http {
                 return await this.axInstance.request<T>({
                     method: 'get',
                     url,
+                    params: queryParams,
                 }).then().catch(err => {
                     return axiosErrorHandler(err)
                 })
@@ -63,7 +64,8 @@ export class Http {
                 return await this.axInstance.request<T>({
                     method: 'post',
                     url,
-                    data
+                    data,
+                    params: queryParams,
                 }).then().catch(err => {
                     return axiosErrorHandler(err)
                 })
@@ -71,7 +73,8 @@ export class Http {
                 return await this.axInstance.request<T>({
                     method: 'put',
                     url,
-                    data
+                    data,
+                    params: queryParams,
                 }).then().catch(err => {
                     return axiosErrorHandler(err)
                 })
@@ -79,7 +82,8 @@ export class Http {
                 return await this.axInstance.request<T>({
                     method: 'delete',
                     url,
-                    data
+                    data,
+                    params: queryParams,
                 }).then().catch(err => {
                     return axiosErrorHandler(err)
                 })
