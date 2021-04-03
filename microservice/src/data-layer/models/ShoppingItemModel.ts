@@ -19,7 +19,7 @@ const shoppingItemSchema = new Schema({
         type: String,
         enum: Object.values(ShoppingItemCategories)
     }
-})
+}, {versionKey: false})
 shoppingItemSchema.plugin(MongoosePaginate);
 
 interface ShoppingItemModel<T extends Document> extends PaginateModel<T> {}

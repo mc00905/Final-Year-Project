@@ -13,6 +13,17 @@ describe('Testing the ShoppingItemAgent', () => {
         await mongoose.disconnect()
     })
     it('Should Successfully Create a Valid Shopping Item', async () => {
-        await createShoppingItem('name', ShoppingItemCategories.FRUIT, 1)
+        await createShoppingItem('Strawberry', ShoppingItemCategories.FRUIT, 1)
+        const newDoc = await shoppingItemModel.findOne({name: 'Strawberry'}).lean().exec()
+        expect(newDoc).toHaveProperty("name");
+        expect(newDoc).toHaveProperty("category");
+        expect(newDoc).toHaveProperty("numberOfStock");
+        expect(newDoc).toHaveProperty("inStock");
+        expect(newDoc).toMatchObject({
+            name: 'Strawberry',
+            category: ShoppingItemCategories.FRUIT,
+            numberOfStock: 1,
+            inStock: true,
+        })
     })
 })
