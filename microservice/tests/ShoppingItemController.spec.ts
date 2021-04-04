@@ -9,6 +9,8 @@ import app from '../src/App';
 
 describe('A test', () => {
     beforeAll(async () => {
+        await mongoose.disconnect();
+        await mongoose.connect("mongodb://localhost:27017/testControllers", { useNewUrlParser: true, useUnifiedTopology: true })
         await shoppingItemModel.create({
             name: 'Banana',
             category: ShoppingItemCategories.FRUIT,

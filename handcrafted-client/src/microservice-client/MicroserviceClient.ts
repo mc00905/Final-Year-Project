@@ -1,11 +1,7 @@
 import { Http } from '../util/Http'
+import { ShoppingItem } from '../util/ShoppingItem'
+import { ShoppingItemCategories } from '../util/ShoppingItemCategories'
 
-interface ShoppingItem {
-    name: string;
-    category: string;
-    inStock: boolean;
-    numberOfStock: number;
-}
 
 export class MicroserviceClient {
     private http: Http;
@@ -14,8 +10,11 @@ export class MicroserviceClient {
         this.http = new Http('http://localhost:3000/REST/1.0')
     }
 
-    public getShoppingItems = async () => {
-        return await this.http.get<ShoppingItem[]>('/shoppingItems')
+    public getShoppingItems = async (page?: number, pageSize?: Number, category?: ShoppingItemCategories, inStock?: boolean) => {
+        const queryParams = {
+            page, pageSize, category, inStock
+        }
+        return await this.http.get<ShoppingItem[]>('/shoppingItems', queryParams)
     }
 
 
