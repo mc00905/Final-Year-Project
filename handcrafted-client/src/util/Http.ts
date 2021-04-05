@@ -103,7 +103,7 @@ export class Http {
         return await this.request<T>(httpVerbs.PUT, url, queryParams, data);
     }
 
-    public del = async <T>(url:string, data: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
+    public del = async <T>(url:string, data?: Object, queryParams?: Object): Promise<AxiosResponse<T>> => {
         return await this.request<T>(httpVerbs.DELETE, url,queryParams, data);
     }
 
