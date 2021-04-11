@@ -74,6 +74,31 @@ export interface InlineResponse404 {
     errorIdentifier: ErrorLibraryShoppingItemNotFound;
 }
 /**
+ * 
+ * @export
+ * @interface PaginatedShoppingItemArr
+ */
+export interface PaginatedShoppingItemArr {
+    /**
+     * List of ShoppingItems
+     * @type {Array<ShoppingItem>}
+     * @memberof PaginatedShoppingItemArr
+     */
+    shoppingItems: Array<ShoppingItem>;
+    /**
+     * Current Page
+     * @type {number}
+     * @memberof PaginatedShoppingItemArr
+     */
+    page: number;
+    /**
+     * Total number of Pages available
+     * @type {number}
+     * @memberof PaginatedShoppingItemArr
+     */
+    totalPages: number;
+}
+/**
  * From T, pick a set of properties whose keys are in the union K
  * @export
  * @interface PickShoppingItemCategory
@@ -105,7 +130,7 @@ export interface PickShoppingItemCategoryOrNameOrNumberOfStock {
      */
     name: string;
     /**
-     * 
+     * The number of the ShoppingItem in stock
      * @type {number}
      * @memberof PickShoppingItemCategoryOrNameOrNumberOfStock
      */
@@ -130,13 +155,13 @@ export interface ShoppingItem {
      */
     category: ShoppingItemCategories;
     /**
-     * 
+     * The number of the ShoppingItem in stock
      * @type {number}
      * @memberof ShoppingItem
      */
     numberOfStock: number;
     /**
-     * 
+     * Boolean representing whether stock is greater than 0
      * @type {boolean}
      * @memberof ShoppingItem
      */
@@ -235,7 +260,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Decrease the number of the ShoppingItem in stock by the value provided
          * @param {string} name 
          * @param {InlineObject1} inlineObject1 
          * @param {*} [options] Override http request option.
@@ -279,8 +304,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @param {string} name 
+         * Delete the targeted ShoppingItem resource
+         * @param {string} name The name of the resource
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -349,13 +374,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @param {boolean} [inStock] 
-         * @param {ShoppingItemCategories} [category] 
+         * Get array of ShoppingItems
+         * @param {boolean} [inStock] Filter results based on whether stocck value is greater than 0 or not
+         * @param {ShoppingItemCategories} [category] The Category to filter results by
+         * @param {number} [page] Page of results to return
+         * @param {number} [pageSize] Size of page to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getShoppingItems: async (inStock?: boolean, category?: ShoppingItemCategories, options: any = {}): Promise<RequestArgs> => {
+        getShoppingItems: async (inStock?: boolean, category?: ShoppingItemCategories, page?: number, pageSize?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/REST/1.0/shoppingItems`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
@@ -374,6 +401,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['category'] = category;
             }
 
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
 
     
             localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
@@ -388,7 +423,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Increase the number of the ShoppingItem in stock by the value provided
          * @param {string} name 
          * @param {InlineObject} inlineObject 
          * @param {*} [options] Override http request option.
@@ -432,20 +467,20 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Update the Category of the ShoppingItem
          * @param {string} name 
          * @param {PickShoppingItemCategory} pickShoppingItemCategory 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateShoppingItem: async (name: string, pickShoppingItemCategory: PickShoppingItemCategory, options: any = {}): Promise<RequestArgs> => {
+        updateShoppingItemCategory: async (name: string, pickShoppingItemCategory: PickShoppingItemCategory, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'name' is not null or undefined
             if (name === null || name === undefined) {
-                throw new RequiredError('name','Required parameter name was null or undefined when calling updateShoppingItem.');
+                throw new RequiredError('name','Required parameter name was null or undefined when calling updateShoppingItemCategory.');
             }
             // verify required parameter 'pickShoppingItemCategory' is not null or undefined
             if (pickShoppingItemCategory === null || pickShoppingItemCategory === undefined) {
-                throw new RequiredError('pickShoppingItemCategory','Required parameter pickShoppingItemCategory was null or undefined when calling updateShoppingItem.');
+                throw new RequiredError('pickShoppingItemCategory','Required parameter pickShoppingItemCategory was null or undefined when calling updateShoppingItemCategory.');
             }
             const localVarPath = `/REST/1.0/shoppingItems/{name}/category`
                 .replace(`{${"name"}}`, encodeURIComponent(String(name)));
@@ -498,7 +533,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Decrease the number of the ShoppingItem in stock by the value provided
          * @param {string} name 
          * @param {InlineObject1} inlineObject1 
          * @param {*} [options] Override http request option.
@@ -512,8 +547,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
-         * @param {string} name 
+         * Delete the targeted ShoppingItem resource
+         * @param {string} name The name of the resource
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -538,21 +573,23 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
-         * @param {boolean} [inStock] 
-         * @param {ShoppingItemCategories} [category] 
+         * Get array of ShoppingItems
+         * @param {boolean} [inStock] Filter results based on whether stocck value is greater than 0 or not
+         * @param {ShoppingItemCategories} [category] The Category to filter results by
+         * @param {number} [page] Page of results to return
+         * @param {number} [pageSize] Size of page to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getShoppingItems(inStock?: boolean, category?: ShoppingItemCategories, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ShoppingItem>>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getShoppingItems(inStock, category, options);
+        async getShoppingItems(inStock?: boolean, category?: ShoppingItemCategories, page?: number, pageSize?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedShoppingItemArr>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getShoppingItems(inStock, category, page, pageSize, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
             };
         },
         /**
-         * 
+         * Increase the number of the ShoppingItem in stock by the value provided
          * @param {string} name 
          * @param {InlineObject} inlineObject 
          * @param {*} [options] Override http request option.
@@ -566,14 +603,14 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Update the Category of the ShoppingItem
          * @param {string} name 
          * @param {PickShoppingItemCategory} pickShoppingItemCategory 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateShoppingItem(name: string, pickShoppingItemCategory: PickShoppingItemCategory, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingItem>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).updateShoppingItem(name, pickShoppingItemCategory, options);
+        async updateShoppingItemCategory(name: string, pickShoppingItemCategory: PickShoppingItemCategory, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShoppingItem>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).updateShoppingItemCategory(name, pickShoppingItemCategory, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -598,7 +635,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return DefaultApiFp(configuration).createShoppingItem(pickShoppingItemCategoryOrNameOrNumberOfStock, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Decrease the number of the ShoppingItem in stock by the value provided
          * @param {string} name 
          * @param {InlineObject1} inlineObject1 
          * @param {*} [options] Override http request option.
@@ -608,8 +645,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return DefaultApiFp(configuration).decreaseShoppingItemStock(name, inlineObject1, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @param {string} name 
+         * Delete the targeted ShoppingItem resource
+         * @param {string} name The name of the resource
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -626,17 +663,19 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return DefaultApiFp(configuration).getShoppingItem(name, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @param {boolean} [inStock] 
-         * @param {ShoppingItemCategories} [category] 
+         * Get array of ShoppingItems
+         * @param {boolean} [inStock] Filter results based on whether stocck value is greater than 0 or not
+         * @param {ShoppingItemCategories} [category] The Category to filter results by
+         * @param {number} [page] Page of results to return
+         * @param {number} [pageSize] Size of page to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getShoppingItems(inStock?: boolean, category?: ShoppingItemCategories, options?: any): AxiosPromise<Array<ShoppingItem>> {
-            return DefaultApiFp(configuration).getShoppingItems(inStock, category, options).then((request) => request(axios, basePath));
+        getShoppingItems(inStock?: boolean, category?: ShoppingItemCategories, page?: number, pageSize?: number, options?: any): AxiosPromise<PaginatedShoppingItemArr> {
+            return DefaultApiFp(configuration).getShoppingItems(inStock, category, page, pageSize, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Increase the number of the ShoppingItem in stock by the value provided
          * @param {string} name 
          * @param {InlineObject} inlineObject 
          * @param {*} [options] Override http request option.
@@ -646,14 +685,14 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return DefaultApiFp(configuration).increaseShoppingItemStock(name, inlineObject, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Update the Category of the ShoppingItem
          * @param {string} name 
          * @param {PickShoppingItemCategory} pickShoppingItemCategory 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateShoppingItem(name: string, pickShoppingItemCategory: PickShoppingItemCategory, options?: any): AxiosPromise<ShoppingItem> {
-            return DefaultApiFp(configuration).updateShoppingItem(name, pickShoppingItemCategory, options).then((request) => request(axios, basePath));
+        updateShoppingItemCategory(name: string, pickShoppingItemCategory: PickShoppingItemCategory, options?: any): AxiosPromise<ShoppingItem> {
+            return DefaultApiFp(configuration).updateShoppingItemCategory(name, pickShoppingItemCategory, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -677,7 +716,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Decrease the number of the ShoppingItem in stock by the value provided
      * @param {string} name 
      * @param {InlineObject1} inlineObject1 
      * @param {*} [options] Override http request option.
@@ -689,8 +728,8 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 
-     * @param {string} name 
+     * Delete the targeted ShoppingItem resource
+     * @param {string} name The name of the resource
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
@@ -711,19 +750,21 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 
-     * @param {boolean} [inStock] 
-     * @param {ShoppingItemCategories} [category] 
+     * Get array of ShoppingItems
+     * @param {boolean} [inStock] Filter results based on whether stocck value is greater than 0 or not
+     * @param {ShoppingItemCategories} [category] The Category to filter results by
+     * @param {number} [page] Page of results to return
+     * @param {number} [pageSize] Size of page to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getShoppingItems(inStock?: boolean, category?: ShoppingItemCategories, options?: any) {
-        return DefaultApiFp(this.configuration).getShoppingItems(inStock, category, options).then((request) => request(this.axios, this.basePath));
+    public getShoppingItems(inStock?: boolean, category?: ShoppingItemCategories, page?: number, pageSize?: number, options?: any) {
+        return DefaultApiFp(this.configuration).getShoppingItems(inStock, category, page, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Increase the number of the ShoppingItem in stock by the value provided
      * @param {string} name 
      * @param {InlineObject} inlineObject 
      * @param {*} [options] Override http request option.
@@ -735,15 +776,15 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Update the Category of the ShoppingItem
      * @param {string} name 
      * @param {PickShoppingItemCategory} pickShoppingItemCategory 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public updateShoppingItem(name: string, pickShoppingItemCategory: PickShoppingItemCategory, options?: any) {
-        return DefaultApiFp(this.configuration).updateShoppingItem(name, pickShoppingItemCategory, options).then((request) => request(this.axios, this.basePath));
+    public updateShoppingItemCategory(name: string, pickShoppingItemCategory: PickShoppingItemCategory, options?: any) {
+        return DefaultApiFp(this.configuration).updateShoppingItemCategory(name, pickShoppingItemCategory, options).then((request) => request(this.axios, this.basePath));
     }
 
 }
