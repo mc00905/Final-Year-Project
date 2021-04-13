@@ -23,6 +23,32 @@ describe('MicroServiceClient', () => {
             })
 
         })
+        describe('Testing a rate limited getShoppingItems request', () => {
+            it('Should return the list of shoppingItems after succeeding on the 4th attempt', async () => {        
+                const failThrice = Nock('http://localhost:3000/REST/1.0')
+                .get('/shoppingItems')
+                .times(3)
+                .reply(429)
+                const retriedSuccessRequest = Nock('http://localhost:3000/REST/1.0')
+                .get('/shoppingItems') 
+                .reply(200, {page: 1, totalPages: 1, shoppingItems: [{"name":"apple","category":"Fruit","numberOfStock":110,"inStock":true}]});
+    
+                const res = await client.getShoppingItems();
+                expect(res.data).toStrictEqual({page: 1, totalPages: 1, shoppingItems: [{"name":"apple","category":"Fruit","numberOfStock":110,"inStock":true}]})
+            })
+            it('Should throw a 429 when the final retry fails', async () => {        
+                const failFourTimes = Nock('http://localhost:3000/REST/1.0')
+                .get('/shoppingItems')
+                .times(4)
+                .reply(429);
+                try {
+                    const res = await client.getShoppingItems();
+                    throw new Error('Expected to fail');
+                } catch (err) {
+                    expect(err.status === 429)
+                }
+            })
+        })
     })
 
     describe('getShoppingItem()', () => {
@@ -34,6 +60,24 @@ describe('MicroServiceClient', () => {
                 const res = await client.getShoppingItem('apple');
                 expect(res.status).toBe(200);
                 expect(res.data).toStrictEqual({"name":"apple","category":"Fruit","numberOfStock":110,"inStock":true})
+            })
+        })
+
+        describe('Testing invalid function calls of getShoppingItem()', () => {
+            it ('Searching for a resource that doesn\'t exist should throw a 404 error', async () => {
+                try {
+                    const failedRequest = Nock('http://localhost:3000/REST/1.0')
+                    .get('/shoppingItems/mango')
+                    .reply(404, {
+                        "errorIdentifier": "ShoppingItemNotFound",
+                        "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
+                    });
+                    const res = await client.getShoppingItem('mango');
+                    throw new Error('Expected to fail')
+                } catch (err) {
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+
+                }
             })
         })
     })
@@ -52,6 +96,16 @@ describe('MicroServiceClient', () => {
                 expect(res.status).toBe(201);
             })
         })
+        describe('Testing invalid function calls of createShoppingItems()', () => {
+            it ('Sending an invalid request body with a missing field should result in an error being thrown', async () => {
+                try {
+                    const res = await client.createShoppingItem(null);
+                    throw new Error('Expected to fail');
+                } catch (err) {
+                    expect(err).toMatchObject({message: "Required parameter pickShoppingItemCategoryOrNameOrNumberOfStock was null or undefined when calling createShoppingItem."});
+                }
+            })
+        })
     })
 
     describe('deleteShoppingItems()', () => {
@@ -62,6 +116,24 @@ describe('MicroServiceClient', () => {
                 .reply(204);
                 const res = await client.deleteShoppingItem('pear');
                 expect(res.status).toBe(204);
+            })
+        })
+
+        describe('Testing invalid function calls of deleteShoppingItem()', () => {
+            it ('Deleting a resource that doesn\'t exist should throw a 404 error', async () => {
+                try {
+                    const failedRequest = Nock('http://localhost:3000/REST/1.0')
+                    .delete('/shoppingItems/mango')
+                    .reply(404, {
+                        "errorIdentifier": "ShoppingItemNotFound",
+                        "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
+                    });
+                    const res = await client.deleteShoppingItem('mango');
+                    throw new Error('Expected to fail')
+                } catch (err) {
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+
+                }
             })
         })
     })

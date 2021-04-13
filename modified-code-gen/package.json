@@ -8,13 +8,13 @@
     "typescript",
     "openapi-client",
     "openapi-generator",
-    "vanilla-client"
+    "modified-client"
   ],
   "license": "Unlicense",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage ",
     "build": "tsc --outDir dist/",
     "prepublishOnly": "npm run build"
   },
@@ -23,6 +23,7 @@
     "@types/nock": "^11.1.0",
     "ts-jest": "^26.5.2",
     "axios": "^0.19.2",
+    "axios-retry": "3.1.9",
     "jest": "^26.6.3",
     "nock": "^13.0.11",
     "ts-node": "^9.1.1"
