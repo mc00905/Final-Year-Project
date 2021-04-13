@@ -157,6 +157,24 @@ describe('MicroServiceClient', () => {
 
             })
         })
+        describe('Testing invalid function calls of increaseShoppingitemStock()', () => {
+            it ('Updating a resource that doesn\'t exist should throw a 404 error', async () => {
+                try {
+                    const failedRequest = Nock('http://localhost:3000/REST/1.0')
+                    .put('/shoppingItems/mango/increaseStock', {
+                        value: 10
+                    }).reply(404, {
+                        "errorIdentifier": "ShoppingItemNotFound",
+                        "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
+                    });
+                    const res = await client.increaseShoppingItemStock('mango', { value: 10});
+                    throw new Error('Expected to fail')
+                } catch (err) {
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+
+                }
+            })
+        })
     })
 
     describe('descreaseShoppingItemStock()', () => {
@@ -176,6 +194,24 @@ describe('MicroServiceClient', () => {
                 expect(res.status).toBe(200);
                 expect(res.data).toStrictEqual({"name":"pear","category":"Fruit","numberOfStock":11,"inStock":true})
 
+            })
+        })
+        describe('Testing invalid function calls of decreaseShoppingItemStock()', () => {
+            it ('Updating a resource that doesn\'t exist should throw a 404 error', async () => {
+                try {
+                    const failedRequest = Nock('http://localhost:3000/REST/1.0')
+                    .put('/shoppingItems/mango/decreaseStock', {
+                        value: 10
+                    }).reply(404, {
+                        "errorIdentifier": "ShoppingItemNotFound",
+                        "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
+                    });
+                    const res = await client.decreaseShoppingItemStock('mango', { value: 10 });
+                    throw new Error('Expected to fail')
+                } catch (err) {
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+
+                }
             })
         })
     })
