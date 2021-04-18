@@ -41,14 +41,3 @@ export const handleError = (err: any, req: any, res: express.Response, next: exp
     next(err);
   }
 };
-
-export const handleGenericError = (err: any, req: any, res: express.Response, next: express.NextFunction) => {
-  const message = err.message ? err.message : 'Internal Server error';
-  const body: genericErrorResponseBody = {
-    message,
-  };
-  res
-    .status(err.status || err.statusCode || 500)
-    .json(body)
-    .send();
-};
