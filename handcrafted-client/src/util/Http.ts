@@ -38,16 +38,10 @@ export class Http {
                 return 'UnknownError'
             })();
             if (errBody.message) errMsg = errBody.message;
-            const errorDetails = (() => {
-                if (errBody.details) {
-                    return errBody.errorDetails;
-                }
-                return ''
-            })()
-            throw new ErrorWrapper(errStatus, errorIdentifier, errMsg, errorDetails);
+            throw new ErrorWrapper(errStatus, errorIdentifier, errMsg);
         } else if (err.request) {
             const requestInfo = err.request;
-            throw new ErrorWrapper(500, 'UnknownError', `Something went wrong with the request: ${errMsg}`, `Request Information: ${requestInfo}`);
+            throw new ErrorWrapper(500, 'UnknownError', `Something went wrong with the request: ${errMsg}`);
         } else {
             throw new ErrorWrapper(500, 'UnknownError', `Something went wrong: ${errMsg}`);
         }
