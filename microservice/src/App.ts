@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { RegisterRoutes } from './service-layer/Routes/routes';
 import { rateLimiter } from './middleware/RateLimiter';
-import { handleError, handleGenericError } from './middleware/ErrorHandler';
+import { handleError } from './middleware/ErrorHandler';
 import { RouteNotFoundError } from './middleware/types/ErrorLibrary';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
@@ -37,7 +37,6 @@ const urlNotFoundErrorHandler = (req: Request, res: Response, next: Function) =>
 
 app.use(urlNotFoundErrorHandler);
 app.use(handleError);
-app.use(handleGenericError);
 
 app.use(cors());
 export default app;

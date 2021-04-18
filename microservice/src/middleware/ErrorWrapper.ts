@@ -18,16 +18,6 @@ export class ErrorWrapper extends Error {
     this.status = status;
   }
 }
-
-export class ErrorWrapper400 extends ErrorWrapper {
-  constructor(
-    errorIdentifier: string,
-    message: string,
-    details: string = '',
-  ) {
-    super(400, errorIdentifier, message, details);
-  }
-}
 export class ErrorWrapper404 extends ErrorWrapper {
   constructor(
     errorIdentifier: string,
@@ -37,17 +27,6 @@ export class ErrorWrapper404 extends ErrorWrapper {
     super(404, errorIdentifier, message, details);
   }
 }
-
-export class ErrorWrapper412 extends ErrorWrapper {
-  constructor(
-    errorIdentifier: string,
-    message: string,
-    details: string = '',
-  ) {
-    super(412, errorIdentifier, message, details);
-  }
-}
-
 export class ErrorWrapper500 extends ErrorWrapper {
   constructor(
     errorIdentifier: string,
