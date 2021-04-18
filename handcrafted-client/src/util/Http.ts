@@ -20,45 +20,47 @@ export class Http {
                 return error?.response?.status === 429 || error?.response?.status === 501;
             },
         });
+        this.axInstance.interceptors.response.use((response) => response, (error: AxiosError) => {
+            return this.axiosErrorHandler(error);
+        });
     }
 
-    private request = async <T>(verb: httpVerbs, url: string, queryParams?: Object, data?: Object): Promise<AxiosResponse<T>> => {
-        const axiosErrorHandler = (err: AxiosError) => {
-            let errMsg = err.message;
-            if (err.response) {
-                const errBody = err.response.data;
-                const errStatus = err.response.status;
-                const errHeader = err.response.headers;
-                const errorIdentifier = (() => {
-                    if (errBody.errorIdentifier) {
-                        return errBody.errorIdentifier;
-                    }
-                    return 'UnknownError'
-                })();
-                if (errBody.message) errMsg = errBody.message;
-                const errorDetails = (() => {
-                    if (errBody.details) {
-                        return errBody.errorDetails;
-                    }
-                    return ''
-                })()
-                throw new ErrorWrapper(errStatus, errorIdentifier, errMsg, errorDetails);
-            } else if (err.request) {
-                const requestInfo = err.request;
-                throw new ErrorWrapper(500, 'UnknownError', `Something went wrong with the request: ${errMsg}`, `Request Information: ${requestInfo}`);
-            } else {
-                throw new ErrorWrapper(500, 'UnknownError', `Something went wrong: ${errMsg}`);
-            }
+    private axiosErrorHandler = (err: AxiosError) => {
+        let errMsg = err.message;
+        if (err.response) {
+            const errBody = err.response.data;
+            const errStatus = err.response.status;
+            const errHeader = err.response.headers;
+            const errorIdentifier = (() => {
+                if (errBody.errorIdentifier) {
+                    return errBody.errorIdentifier;
+                }
+                return 'UnknownError'
+            })();
+            if (errBody.message) errMsg = errBody.message;
+            const errorDetails = (() => {
+                if (errBody.details) {
+                    return errBody.errorDetails;
+                }
+                return ''
+            })()
+            throw new ErrorWrapper(errStatus, errorIdentifier, errMsg, errorDetails);
+        } else if (err.request) {
+            const requestInfo = err.request;
+            throw new ErrorWrapper(500, 'UnknownError', `Something went wrong with the request: ${errMsg}`, `Request Information: ${requestInfo}`);
+        } else {
+            throw new ErrorWrapper(500, 'UnknownError', `Something went wrong: ${errMsg}`);
         }
+    }
 
+
+    private request = async <T>(verb: httpVerbs, url: string, queryParams?: Object, data?: Object): Promise<AxiosResponse<T>> => {
         switch (verb) {
             case httpVerbs.GET:
                 return await this.axInstance.request<T>({
                     method: 'get',
                     url,
                     params: queryParams,
-                }).then().catch(err => {
-                    return axiosErrorHandler(err)
                 })
             case httpVerbs.POST:
                 return await this.axInstance.request<T>({
@@ -66,8 +68,6 @@ export class Http {
                     url,
                     data,
                     params: queryParams,
-                }).then().catch(err => {
-                    return axiosErrorHandler(err)
                 })
             case httpVerbs.PUT:
                 return await this.axInstance.request<T>({
@@ -75,8 +75,6 @@ export class Http {
                     url,
                     data,
                     params: queryParams,
-                }).then().catch(err => {
-                    return axiosErrorHandler(err)
                 })
             case httpVerbs.DELETE:
                 return await this.axInstance.request<T>({
@@ -84,8 +82,6 @@ export class Http {
                     url,
                     data,
                     params: queryParams,
-                }).then().catch(err => {
-                    return axiosErrorHandler(err)
                 })
 
         }
