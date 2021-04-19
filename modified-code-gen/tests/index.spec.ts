@@ -215,4 +215,43 @@ describe('MicroServiceClient', () => {
             })
         })
     })
+
+    describe('updateShoppingItemCategory()', () => {
+        describe('Testing valid function calls of updateShoppingItemCategory()', () => {
+            it ('Sending a valid request body should result in a successful response', async () => {
+                const request = Nock('http://localhost:3000/REST/1.0')
+                .put('/shoppingItems/pear/category', {
+                    category: ShoppingItemCategories.Vegetable
+                })
+                .reply(200, {
+                    name: 'pear',
+                    category: ShoppingItemCategories.Vegetable,
+                    numberOfStock: 11,
+                    inStock: true,
+                });
+                const res = await client.updateShoppingItemCategory('pear', { category: ShoppingItemCategories.Vegetable });
+                expect(res.status).toBe(200);
+                expect(res.data).toStrictEqual({"name":"pear","category":"Vegetable","numberOfStock":11,"inStock":true})
+
+            })
+        })
+        describe('Testing invalid function calls of updateShoppingItemCategory()', () => {
+            it ('Updating a resource that doesn\'t exist should throw a 404 error', async () => {
+                try {
+                    const failedRequest = Nock('http://localhost:3000/REST/1.0')
+                    .put('/shoppingItems/mango/category', {
+                        category: ShoppingItemCategories.Vegetable
+                    }).reply(404, {
+                        "errorIdentifier": "ShoppingItemNotFound",
+                        "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
+                    });
+                    const res = await client.updateShoppingItemCategory('mango',  { category: ShoppingItemCategories.Vegetable });
+                    throw new Error('Expected to fail')
+                } catch (err) {
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+
+                }
+            })
+        })
+    })
 })

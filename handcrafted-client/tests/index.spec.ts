@@ -76,7 +76,8 @@ describe('MicroServiceClient', () => {
                     const res = await client.getShoppingItem('mango');
                     throw new Error('Expected to fail')
                 } catch (err) {
-                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound');
+                    expect(err.status).toBe(404);
 
                 }
             })
@@ -93,6 +94,7 @@ describe('MicroServiceClient', () => {
                     numberOfStock: 1,
                 })
                 .reply(201);
+
                 const res = await client.createShoppingItem('pear', ShoppingItemCategories.FRUIT, 1);
                 expect(res.status).toBe(201);
             })
@@ -197,6 +199,45 @@ describe('MicroServiceClient', () => {
                         "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
                     });
                     const res = await client.decreaseShoppingItemStock('mango', 10);
+                    throw new Error('Expected to fail')
+                } catch (err) {
+                    expect(err.errorIdentifier).toBe('ShoppingItemNotFound')
+
+                }
+            })
+        })
+    })
+
+    describe('updateShoppingItemCategory()', () => {
+        describe('Testing valid function calls of updateShoppingItemCategory()', () => {
+            it ('Sending a valid request body should result in a successful response', async () => {
+                const request = Nock('http://localhost:3000/REST/1.0')
+                .put('/shoppingItems/pear/category', {
+                    category: ShoppingItemCategories.VEGETABLE
+                })
+                .reply(200, {
+                    name: 'pear',
+                    category: ShoppingItemCategories.VEGETABLE,
+                    numberOfStock: 11,
+                    inStock: true,
+                });
+                const res = await client.updateShoppingItemCategory('pear', ShoppingItemCategories.VEGETABLE);
+                expect(res.status).toBe(200);
+                expect(res.data).toStrictEqual({"name":"pear","category":"Vegetable","numberOfStock":11,"inStock":true})
+
+            })
+        })
+        describe('Testing invalid function calls of updateShoppingItemCategory()', () => {
+            it ('Updating a resource that doesn\'t exist should throw a 404 error', async () => {
+                try {
+                    const failedRequest = Nock('http://localhost:3000/REST/1.0')
+                    .put('/shoppingItems/mango/category', {
+                        category: ShoppingItemCategories.VEGETABLE
+                    }).reply(404, {
+                        "errorIdentifier": "ShoppingItemNotFound",
+                        "message": "Shopping Item not found with params: {\"name\":\"mango\"}"
+                    });
+                    const res = await client.updateShoppingItemCategory('mango', ShoppingItemCategories.VEGETABLE);
                     throw new Error('Expected to fail')
                 } catch (err) {
                     expect(err.errorIdentifier).toBe('ShoppingItemNotFound')

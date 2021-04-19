@@ -37,6 +37,13 @@ export class MicroserviceClient {
         return await this.http.put<ShoppingItem>(`/shoppingItems/${itemQuery}/decreaseStock`, body);
     }
 
+    public updateShoppingItemCategory = async (itemQuery: string, category: ShoppingItemCategories): Promise<AxiosResponse<ShoppingItem>> => {
+        const body = {
+            category,
+        }
+        return await this.http.put<ShoppingItem>(`/shoppingItems/${itemQuery}/category`, body);
+    }
+
     
     public createShoppingItem = async (name: string, category: string, numberOfStock: number): Promise<AxiosResponse<void>> => {
         const body = {
