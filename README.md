@@ -2,6 +2,10 @@
 
 Instructions given assume you have downloaded the entire repo and are in the relevant sub-directory when the commands are inputted unless otherwise stated.
 
+# Dissertation
+
+A PDF copy of my dissertation is located in the file `FYP_Final_Report_6425639.pdf`
+
 # microservice
 
 Exemplar micro-service built using the tools and libraries over the course of the project.
